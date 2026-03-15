@@ -18,7 +18,7 @@ import javax.swing.JOptionPane;
 public class ImageLoader {
     private static ImageLoader INSTANCE = null;
     private String path;
-    private File file = new File("");
+    private File file = new File("./src/resources/default.png");
 
     private ImageLoader() {
     }
