@@ -4,18 +4,8 @@
  */
 package com.github.org.sparks_of_fabrication.imgstenography.graphics;
 import com.github.org.sparks_of_fabrication.imgstenography.loaders.ImageLoader;
-import com.github.org.sparks_of_fabrication.imgstenography.TextInputType;
-import com.github.org.sparks_of_fabrication.imgstenography.loaders.FileLoader;
+import com.github.org.sparks_of_fabrication.imgstenography.loaders.TextFileLoader;
 import com.github.org.sparks_of_fabrication.imgstenography.loaders.LoaderSpawn;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class MainFrame extends javax.swing.JFrame {
     private ImageLoader imageLoader;
-    private FileLoader fileLoader;
+    private TextFileLoader fileLoader;
 
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
@@ -39,7 +29,7 @@ public class MainFrame extends javax.swing.JFrame {
         fileLoader = LoaderSpawn.createLoader(LoaderSpawn.LoaderType.FILE);
         
         this.imagePanel1.inherit(imageLoader);
-        this.textInputPanel1.inherit(fileLoader);
+        this.textInputPanelSwitcher2.inherit(fileLoader);
     }
 
     /**
@@ -52,7 +42,8 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         imagePanel1 = new com.github.org.sparks_of_fabrication.imgstenography.graphics.ImagePanel();
-        textInputPanel1 = new com.github.org.sparks_of_fabrication.imgstenography.graphics.TextInputPanel();
+        jToggleButton1 = new javax.swing.JToggleButton();
+        textInputPanelSwitcher2 = new com.github.org.sparks_of_fabrication.imgstenography.graphics.textpanels.TextInputPanelSwitcher();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("ImageStenography");
@@ -63,28 +54,35 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jToggleButton1.setText("File\\Input");
+        jToggleButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jToggleButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(imagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 420, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(textInputPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addComponent(imagePanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                .addGap(21, 21, 21)
+                .addComponent(jToggleButton1)
+                .addGap(18, 18, 18)
+                .addComponent(textInputPanelSwitcher2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(imagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(textInputPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 168, Short.MAX_VALUE))
+                    .addComponent(textInputPanelSwitcher2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(imagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 342, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jToggleButton1))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
 
         pack();
@@ -99,6 +97,12 @@ public class MainFrame extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_formWindowClosing
+
+    private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
+        // TODO add your handling code here:
+        
+        this.textInputPanelSwitcher2.switchMode();
+    }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     
     /**
@@ -128,6 +132,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private com.github.org.sparks_of_fabrication.imgstenography.graphics.ImagePanel imagePanel1;
-    private com.github.org.sparks_of_fabrication.imgstenography.graphics.TextInputPanel textInputPanel1;
+    private javax.swing.JToggleButton jToggleButton1;
+    private com.github.org.sparks_of_fabrication.imgstenography.graphics.textpanels.TextInputPanelSwitcher textInputPanelSwitcher2;
     // End of variables declaration//GEN-END:variables
 }
