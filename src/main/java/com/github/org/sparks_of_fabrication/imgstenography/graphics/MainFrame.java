@@ -3,15 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.github.org.sparks_of_fabrication.imgstenography.graphics;
-import com.github.org.sparks_of_fabrication.imgstenography.ImageLoader;
-import java.awt.Dimension;
-import java.awt.Image;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.io.File;
-import javax.swing.ImageIcon;
+import com.github.org.sparks_of_fabrication.imgstenography.loaders.ImageLoader;
+import com.github.org.sparks_of_fabrication.imgstenography.loaders.TextFileLoader;
+import com.github.org.sparks_of_fabrication.imgstenography.loaders.LoaderSpawn;
 import javax.swing.JOptionPane;
 
 /**
@@ -20,6 +14,8 @@ import javax.swing.JOptionPane;
  */
 public class MainFrame extends javax.swing.JFrame {
     private ImageLoader imageLoader;
+    private TextFileLoader fileLoader;
+
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(MainFrame.class.getName());
 
@@ -30,29 +26,10 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         jTextArea1.setLineWrap(true);
         
-        imageLoader = ImageLoader.getInstance();
+        imageLoader = LoaderSpawn.createLoader(LoaderSpawn.LoaderType.IMAGE);
+        fileLoader = LoaderSpawn.createLoader(LoaderSpawn.LoaderType.FILE);
         
-        jLabel1.setText(String.format("Current File Chosen: %s", imageLoader.getFile().getName()));
-        jLabel2.setText("");
-        
-        imagePreview1.setVisible(false);
-        jToggleButton1.setEnabled(false);
-        
-        imagePreview1.addComponentListener(new ComponentAdapter() {
-                @Override
-                public void componentShown(ComponentEvent e) {
-                    if(imageLoader.isTriggered()) {
-                        showImagePreview();
-                    }
-                }
-
-                @Override
-                public void componentResized(ComponentEvent e) {
-                    if(imageLoader.isTriggered()) {
-                          showImagePreview();
-                    }
-                }
-            });
+        this.imagePanel1.inherit(imageLoader);
     }
 
     /**
@@ -91,6 +68,7 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jButton4 = new javax.swing.JButton();
+        imagePanel1 = new com.github.org.sparks_of_fabrication.imgstenography.graphics.ImagePanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("ImageStenography");
@@ -261,6 +239,9 @@ public class MainFrame extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton4)))
                         .addGap(66, 66, 66))))
+                .addContainerGap()
+                .addComponent(imagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,34 +297,12 @@ public class MainFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(imagePreview2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(50, Short.MAX_VALUE))
+                .addComponent(imagePanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(110, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MousePressed
-        // TODO add your handling code here:
-        
-        ImageChooser imgForm = new ImageChooser();
-        
-        imgForm.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosed(WindowEvent e) {
-                if(imageLoader.getFile() != null) {
-                    jLabel1.setText(String.format("Current File Chosen: %s", imageLoader.getFile().getName()));
-                    jToggleButton1.setEnabled(true);
-                    
-                    showImagePreview();
-                }else{
-                    jLabel1.setText(String.format("Current File Chosen: %s", ""));
-                    jToggleButton1.setEnabled(false);
-                }
-            }
-            
-        });
-        
-        imgForm.setVisible(true);
-    }//GEN-LAST:event_jButton1MousePressed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
@@ -355,14 +314,6 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_formWindowClosing
 
-    private void showImagePreview() {
-        Dimension dimension = imageLoader.imageGetDimensions();
-        String dimensionText = String.format("width: %d, height: %d",  dimension.width, dimension.height);
-        jLabel2.setText(dimensionText);
-        File file = imageLoader.getFile();
-        
-        imagePreview1.drawImage(file);
-    }
     
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
         // TODO add your handling code here:
@@ -435,5 +386,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
+    private com.github.org.sparks_of_fabrication.imgstenography.graphics.ImagePanel imagePanel1;
     // End of variables declaration//GEN-END:variables
 }

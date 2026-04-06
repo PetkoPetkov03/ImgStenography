@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.github.org.sparks_of_fabrication.imgstenography;
+package com.github.org.sparks_of_fabrication.imgstenography.loaders;
 
 import java.awt.Component;
 import java.awt.Dialog;
@@ -20,24 +20,11 @@ import javax.swing.JOptionPane;
  *
  * @author petko
  */
-public class ImageLoader {
+public class ImageLoader implements LoaderSolver<BufferedImage> {
     private boolean trigger = false;
-    private static ImageLoader INSTANCE = null;
-    private String path;
     private File file;
     private BufferedImage bufferedImage;
 
-    private ImageLoader() {
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public String getPath() {
-        return path;
-    }
-    
     public Dimension imageGetDimensions() {
         if(file == null) return new Dimension();
         Dimension result = new Dimension();
@@ -45,6 +32,11 @@ public class ImageLoader {
          result.setSize(bufferedImage.getWidth(), bufferedImage.getHeight());
         
         return result;
+    }
+
+    @Override
+    public BufferedImage convertIntoSolver() {
+         return  bufferedImage;
     }
     
     private void trigger() {
@@ -54,18 +46,13 @@ public class ImageLoader {
     public boolean isTriggered() {
         return this.trigger;
     }
-    
-    private String getExt(File file) {
-        String name = file.getName();
-        int dot = name.lastIndexOf('.');
-        return (dot == -1) ? "" : name.substring(dot + 1);
-    }
 
+    @Override
     public boolean setFile(Component owner, File file) {
         String ext = getExt(file);
         
         System.out.println(ext);
-       if(ext.toLowerCase().equals("png") || ext.toLowerCase().equals("jpg")) {
+       if(ext.toLowerCase().equals("png") || ext.toLowerCase().equals("jpg") || ext.toLowerCase().equals("bmp")) {
              this.file = file;
              
              try{
@@ -75,26 +62,50 @@ public class ImageLoader {
                  ex.printStackTrace();
                  System.exit(1);
              }
-             return false;
+             return true;
         }
        
         JOptionPane.showMessageDialog(owner, "The selected file is not a supported image format.", "Invalid File", JOptionPane.ERROR_MESSAGE);
-        return true;
+        return false;
     }
 
+    @Override
+    public boolean setFile(File file) {
+        String ext = getExt(file);
+        
+         System.out.println(ext);
+         if(ext.toLowerCase().equals("png") || ext.toLowerCase().equals("jpg") || ext.toLowerCase().equals("bmp")) {
+             this.file = file;
+             
+             try{
+                bufferedImage = ImageIO.read(this.file);
+                trigger();
+             }catch(IOException ex) {
+                 ex.printStackTrace();
+                 System.exit(1);
+             }
+             return true;
+        }
+         
+        return false;
+    }
+
+    @Override
+    public void flush() {
+        this.trigger = false;
+        this.file = new File("");
+        this.bufferedImage = null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
     public File getFile() {
         if(file == null) {
             return new File("");
         }
         return file;
-    }
- 
-    
-    public static ImageLoader getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new ImageLoader();
-        }
-        
-        return INSTANCE;
     }
 }
